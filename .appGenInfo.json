@@ -1,0 +1,24 @@
+{
+  "generationParameters": {
+    "generationDate": "Fri Jul 25 2025 23:38:06 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "SAP Business Application Studio",
+    "serviceType": "None",
+    "metadataFilename": "",
+    "serviceUrl": "N/A",
+    "appName": "z_sap_btp_decp",
+    "appTitle": "Floorplan 3D Visualization",
+    "appDescription": "An SAPUI5 app to visualise warehouse floorplans in 3D, showing real-time asset locations for improved operational visibility and space management.",
+    "appNamespace": "",
+    "ui5Theme": "sap_horizon_dark",
+    "ui5Version": "1.138.1",
+    "enableCodeAssist": true,
+    "enableEslint": true,
+    "enableTypeScript": true,
+    "showMockDataInfo": false,
+    "generatorVersion": "1.18.3",
+    "template": "Basic",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [],
+    "launchText": "To launch the generated application, run the following from the generated application root folder:\n\n```\n    npm start\n```"
+  }
+}
