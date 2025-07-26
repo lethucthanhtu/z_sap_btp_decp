@@ -1,7 +1,10 @@
-<mvc:View controllerName="zsapbtpdecp.controller.App"
+<mvc:View
+    controllerName="zsapbtpdecp.controller.App"
     displayBlock="true"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <App id="app">
-    </App>
+    xmlns="sap.m"
+>
+    <Shell id="_IDGenShell">
+        <App id="app" />
+    </Shell>
 </mvc:View>

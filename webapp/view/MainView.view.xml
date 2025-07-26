@@ -1,6 +1,82 @@
 <mvc:View controllerName="zsapbtpdecp.controller.MainView"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
+ 	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:vk="sap.ui.vk"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:u="sap.ui.unified"
+	displayBlock="true"
+    >
     <Page id="page" title="{i18n>title}">
+    <VBox id="_IDGenVBox" height="100%">
+    <items>
+        <HBox id="_IDGenHBox1">
+            <layoutData>
+                <FlexItemData id="_IDGenFlexItemData" growFactor="1" />
+            </layoutData>
+            <items>
+                <vk:Viewer
+                    id="viewer"
+                    toolbarTitle="{i18n>viewerToolbarTitle}"
+                >
+                    <vk:layoutData>
+                        <FlexItemData id="_IDGenFlexItemData1" growFactor="1" />
+                    </vk:layoutData>
+                </vk:Viewer>
+            </items>
+        </HBox>
+        <f:Form id="_IDGenForm" editable="true">
+            <f:layout>
+                <f:ResponsiveGridLayout id="_IDGenResponsiveGridLayout" />
+            </f:layout>
+            <f:formContainers>
+                <f:FormContainer id="_IDGenFormContainer">
+                    <f:formElements>
+                        <f:FormElement id="_IDGenFormElement">
+                            <f:fields>
+                                <Input id="_IDGenInput"
+                                    value="{source>/url1}"
+                                    valueLiveUpdate="true"
+                                    placeholder="{i18n>formRemoteURL1}"
+                                >
+                                    <layoutData>
+                                        <l:GridData id="_IDGenGridData" span="L12 M12 S12" />
+                                    </layoutData>
+                                </Input>
+                                <Input id="_IDGenInput1"
+                                    value="{source>/url2}"
+                                    valueLiveUpdate="true"
+                                    placeholder="{i18n>formRemoteURL2}"
+                                >
+                                    <layoutData>
+                                        <l:GridData id="_IDGenGridData1" span="L12 M12 S12" />
+                                    </layoutData>
+                                </Input>
+                                <Input id="_IDGenInput2"
+                                    value="{source>/url3}"
+                                    valueLiveUpdate="true"
+                                    placeholder="{i18n>formRemoteURL3}"
+                                >
+                                    <layoutData>
+                                        <l:GridData id="_IDGenGridData2" span="L12 M12 S12" />
+                                    </layoutData>
+                                </Input>
+                                <Button id="_IDGenButton"
+                                    text="{i18n>buttonLoadModel}"
+                                    press="onPressLoadRemoteModels"
+                                >
+                                    <layoutData>
+                                        <l:GridData id="_IDGenGridData3" span="L2 M2 S2" />
+                                    </layoutData>
+                                </Button>
+                            </f:fields>
+                        </f:FormElement>
+                    </f:formElements>
+                </f:FormContainer>
+            </f:formContainers>
+        </f:Form>
+    </items>
+</VBox>
+
     </Page>
 </mvc:View>
