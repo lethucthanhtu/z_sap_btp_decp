@@ -28,5 +28,11 @@
   },
   "include": [
     "./webapp/**/*"
+  ],
+  "exclude": [
+    "./webapp/test/unit/unitTests.qunit.ts",
+    "./webapp/test/integration/NavigationJourney.ts",
+    "./webapp/test/integration/opaTests.qunit.ts",
+    "./webapp/test/unit/controller/MainView.controller.ts"
   ]
 }
