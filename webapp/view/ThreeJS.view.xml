@@ -9,19 +9,109 @@
         title="ThreeJS View"
     >
         <content>
-            <Text
-                id="_IDGenText"
-                text="Welcome to the ThreeJS view!"
-            />
+            <HBox id="_IDGenHBox">
+                <!-- Side Panel -->
+                <VBox
+                    id="_IDGenVBox1"
+                    width="200px"
+                    class="sapUiSmallMargin"
+                >
+                    <Text
+                        id="_IDGenText"
+                        text="Toggle Models"
+                    />
+                    <CheckBox
+                        id="_IDGenCheckBox"
+                        text="Astronaut"
+                        selected="true"
+                        select="onToggleModel"
+                    >
+                        <customData>
+                            <core:CustomData
+                                key="modelKey"
+                                value="Astronaut"
+                            />
+                        </customData>
+                    </CheckBox>
+                    <CheckBox
+                        id="_IDGenCheckBox1"
+                        text="Enemy Flying"
+                        selected="true"
+                        select="onToggleModel"
+                    >
+                        <customData>
+                            <core:CustomData
+                                key="modelKey"
+                                value="Enemy Flying"
+                            />
+                        </customData>
+                    </CheckBox>
+                    <CheckBox
+                        id="_IDGenCheckBox2"
+                        text="Enemy Large"
+                        selected="true"
+                        select="onToggleModel"
+                    >
+                        <customData>
+                            <core:CustomData
+                                key="modelKey"
+                                value="Enemy Large"
+                            />
+                        </customData>
+                    </CheckBox>
+                    <CheckBox
+                        id="_IDGenCheckBox3"
+                        text="Enemy Small"
+                        selected="true"
+                        select="onToggleModel"
+                    >
+                        <customData>
+                            <core:CustomData
+                                key="modelKey"
+                                value="Enemy Small"
+                            />
+                        </customData>
+                    </CheckBox>
+                    <CheckBox
+                        id="_IDGenCheckBox4"
+                        text="Planet"
+                        selected="true"
+                        select="onToggleModel"
+                    >
+                        <customData>
+                            <core:CustomData
+                                key="modelKey"
+                                value="Planet"
+                            />
+                        </customData>
+                    </CheckBox>
+                    <CheckBox
+                        id="_IDGenCheckBox5"
+                        text="Rock"
+                        selected="true"
+                        select="onToggleModel"
+                    >
+                        <customData>
+                            <core:CustomData
+                                key="modelKey"
+                                value="Rock"
+                            />
+                        </customData>
+                    </CheckBox>
+                </VBox>
 
-            <VBox
-                id="_IDGenVBox1"
-                class="sapUiSmallMargin"
-            >
-                <core:HTML
-                    id="threeContainer"
-                    content="&lt;div id='threejs-canvas' style='width:100%; height:500px;'&gt;&lt;/div&gt;" />
-            </VBox>
+                <!-- Three.js Canvas -->
+                <VBox
+                    id="_IDGenVBox2"
+                    class="sapUiSmallMargin"
+                    width="100%"
+                >
+                    <core:HTML
+                        id="threeContainer"
+                        content="&lt;div id='threejs-canvas' style='width:100%; height:500px;'&gt;&lt;/div&gt;"
+                    />
+                </VBox>
+            </HBox>
         </content>
     </Page>
 </mvc:View>
