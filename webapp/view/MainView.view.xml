@@ -8,6 +8,8 @@
 	displayBlock="true"
     >
     <Page id="page" title="{i18n>title}">
+    <Button id="_IDGenButton1" text="Go to ThreeJS" press="onNavigateToThreeJS"/>
+
     <VBox id="_IDGenVBox" height="100%">
     <items>
         <HBox id="_IDGenHBox1">

@@ -88,14 +88,26 @@
           "target": [
             "TargetMainView"
           ]
+        },
+        {
+          "name": "RouteThreeJS",
+          "pattern": "threejs",
+          "target": [
+            "TargetThreeJS"
+          ]
         }
       ],
       "targets": {
         "TargetMainView": {
           "id": "MainView",
           "name": "MainView"
+        },
+        "TargetThreeJS": {
+          "id": "ThreeJS",
+          "name": "ThreeJS"
         }
       }
+      
     },
     "rootView": {
       "viewName": "zsapbtpdecp.view.App",

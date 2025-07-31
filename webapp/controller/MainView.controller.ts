@@ -3,6 +3,7 @@ import MessageToast from 'sap/m/MessageToast';
 import Event from 'sap/ui/base/Event';
 import Controller from 'sap/ui/core/mvc/Controller';
 import View from 'sap/ui/core/mvc/View';
+import UIComponent from 'sap/ui/core/UIComponent';
 import JSONModel from 'sap/ui/model/json/JSONModel';
 import ResourceModel from 'sap/ui/model/resource/ResourceModel';
 import ContentResource from 'sap/ui/vk/ContentResource';
@@ -90,4 +91,10 @@ export default class MainView extends Controller {
                 viewer.addContentResource(contentResource);
             }
     }
+
+    public onNavigateToThreeJS(): void {
+        const oRouter = UIComponent.getRouterFor(this);
+        oRouter.navTo("RouteThreeJS");
+      }
+    
 }

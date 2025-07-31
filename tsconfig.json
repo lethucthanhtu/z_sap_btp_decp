@@ -34,5 +34,7 @@
     "./webapp/test/integration/NavigationJourney.ts",
     "./webapp/test/integration/opaTests.qunit.ts",
     "./webapp/test/unit/controller/MainView.controller.ts"
-  ]
+  ],
+  "esModuleInterop": true,
+  "allowSyntheticDefaultImports": true
 }

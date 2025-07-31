@@ -34,6 +34,8 @@ server:
           overridesToOverride: true
         excludePatterns:
           - /Component-preload.js
+    - name: ui5-tooling-modules-middleware
+      afterMiddleware: compression
 builder:
   customTasks:
     - name: ui5-tooling-transpile-task
@@ -42,3 +44,5 @@ builder:
         debug: true
         transformModulesToUI5:
           overridesToOverride: true
+    - name: ui5-tooling-modules-task
+      afterTask: replaceVersion
