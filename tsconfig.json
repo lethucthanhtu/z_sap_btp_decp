@@ -1,40 +1,38 @@
 {
-  "compilerOptions": {
-    "target": "es2022",
-    "module": "es2022",
-    "skipLibCheck": true,
-    "allowJs": true,
-    "strict": true,
-    "strictPropertyInitialization": false,
-    "moduleResolution": "node",
-    "rootDir": "./webapp",
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "paths": {
-      "zsapbtpdecp/*": [
-        "./webapp/*"
-      ],
-      "unit/*": [
-        "./webapp/test/unit/*"
-      ],
-      "integration/*": [
-        "./webapp/test/integration/*"
-      ]
-    },
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules/@sapui5/types"
-    ]
-  },
-  "include": [
-    "./webapp/**/*"
-  ],
-  "exclude": [
-    "./webapp/test/unit/unitTests.qunit.ts",
-    "./webapp/test/integration/NavigationJourney.ts",
-    "./webapp/test/integration/opaTests.qunit.ts",
-    "./webapp/test/unit/controller/MainView.controller.ts"
-  ],
-  "esModuleInterop": true,
-  "allowSyntheticDefaultImports": true
+	"compilerOptions": {
+		"target": "es2022",
+		"module": "es2022",
+		"skipLibCheck": true,
+		"allowJs": true,
+		"strict": true,
+		"strictPropertyInitialization": false,
+		"moduleResolution": "node",
+		"rootDir": "./webapp",
+		"outDir": "./dist",
+		"baseUrl": "./",
+		"paths": {
+			"zsapbtpdecp/*": [
+				"./webapp/*"
+			],
+			"unit/*": [
+				"./webapp/test/unit/*"
+			],
+			"integration/*": [
+				"./webapp/test/integration/*"
+			]
+		},
+		"typeRoots": [
+			"./node_modules/@types"
+		],
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+	},
+	"include": [
+		"./webapp/**/*",
+		"./webapp/types/sapui5-global.d.ts"
+	],
+	"exclude": [
+		"node_modules",
+		"./webapp/test/**/*"
+	]
 }
