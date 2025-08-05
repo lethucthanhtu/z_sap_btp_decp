@@ -60,6 +60,11 @@
         "settings": {
           "bundleName": "zsapbtpdecp.i18n.i18n"
         }
+      },
+      "test1config":{
+        "type": "sap.ui.model.json.JSONModel",
+        "uri": "model/3JSMs/test1/model-configs.json",
+        "settings": {}
       }
     },
     "resources": {
