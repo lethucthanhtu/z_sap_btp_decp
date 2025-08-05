@@ -72,7 +72,8 @@
         {
           "uri": "css/style.css"
         }
-      ]
+      ],
+      "js":[{"url":"https://cdn.jsdelivr.net/npm/three@0.178.0/build/three.min.js"}]
     },
     "routing": {
       "config": {
