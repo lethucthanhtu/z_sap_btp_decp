@@ -4,11 +4,15 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import CheckBox from 'sap/m/CheckBox';
 import Event from 'sap/ui/base/Event';
+import JSONModel from 'sap/ui/model/json/JSONModel';
 
 /**
  * @namespace zsapbtpdecp.controller
  */
 export default class ThreeJS extends Controller {
+	/**
+	 * golbal model for toggle controller
+	 */
 	private _models: Map<string, THREE.Object3D> = new Map();
 
 	public onAfterRendering(): void {
@@ -16,7 +20,7 @@ export default class ThreeJS extends Controller {
 	}
 
 	private _initThreeJS(): void {
-		let container = this._getContainer();
+		const container = this._getContainer();
 		if (!container) return;
 
 		const scene = this._createScene();
@@ -31,9 +35,8 @@ export default class ThreeJS extends Controller {
 
 	private _getContainer(): HTMLElement | null {
 		const container = document.getElementById('threejs-canvas');
-		if (!container) {
-			console.error('Three.js container not found.');
-		}
+		if (!container) console.error('Three.js container not found.');
+
 		return container;
 	}
 
@@ -87,16 +90,30 @@ export default class ThreeJS extends Controller {
 		scene.add(ambientLight);
 	}
 
+	private _fetchGlobalModels(modelName:string, property?:string) { 
+		const oComponent = this.getOwnerComponent()
+		if (!oComponent) return null;
+
+		const oModel = oComponent.getModel(modelName) as JSONModel;
+		if(!oModel) return null
+
+		if (property) return oModel.getProperty(`/${property}`);
+
+		return oModel.getData();
+	}
+
 	private _loadModels(scene: THREE.Scene): void {
 		const loader = new GLTFLoader();
-		const modelConfigs = [
-			{ name: 'Astronaut', path: '/model/3JSMs/test1/Astronaut.glb' },
-			{ name: 'Enemy Flying', path: '/model/3JSMs/test1/Enemy Flying.glb' },
-			{ name: 'Enemy Large', path: '/model/3JSMs/test1/Enemy Large.glb' },
-			{ name: 'Enemy Small', path: '/model/3JSMs/test1/Enemy Small.glb' },
-			{ name: 'Planet', path: '/model/3JSMs/test1/Planet.glb' },
-			{ name: 'Rock', path: '/model/3JSMs/test1/Rock.glb' },
-		];
+
+		type TModel = {
+			name: string;
+			path: string;
+		}
+		const modelConfigs: TModel[] | null = this._fetchGlobalModels('test1config', 'model') as TModel[]
+		if (!modelConfigs) {
+			console.error('Failed to fetch models');
+			return
+		}
 
 		modelConfigs.forEach((config, index) => {
 			loader.load(
@@ -111,12 +128,12 @@ export default class ThreeJS extends Controller {
 						}
 					});
 					scene.add(model);
+
+					// add model to golbal model for toggle controller
 					this._models.set(config.name, model);
 				},
 				undefined,
-				(error) => {
-					console.error(`Error loading model at ${config.path}:`, error);
-				}
+				(error) => { console.error(`Error loading model at ${config.path}:`, error); }
 			);
 		});
 	}
@@ -135,12 +152,14 @@ export default class ThreeJS extends Controller {
 		animate();
 	}
 
+	/**
+	 * Toggle on/off model controller
+	 * @param event
+	 */
 	public onToggleModel(event: Event): void {
-		const checkbox = event.getSource() as CheckBox;
+		const checkbox: CheckBox = event.getSource();
 		const modelKey = checkbox.getCustomData()[0].getValue();
 		const visible = checkbox.getSelected();
-
-		console.log('checkbox', checkbox, 'modelkey', modelKey, 'visible', visible);
 
 		const model = this._models.get(modelKey);
 		if (model) model.visible = visible;

@@ -12,89 +12,23 @@
             <HBox id="_IDGenHBox">
                 <!-- Side Panel -->
                 <VBox
-                    id="_IDGenVBox1"
+                    id="dynamicCheckBoxContainer"
                     width="200px"
                     class="sapUiSmallMargin"
+                    items="{
+                        path: 'test1config>/model'
+                    }"
                 >
-                    <Text
-                        id="_IDGenText"
-                        text="Toggle Models"
-                    />
                     <CheckBox
                         id="_IDGenCheckBox"
-                        text="Astronaut"
+                        text="{test1config>name}"
                         selected="true"
                         select="onToggleModel"
                     >
                         <customData>
                             <core:CustomData
                                 key="modelKey"
-                                value="Astronaut"
-                            />
-                        </customData>
-                    </CheckBox>
-                    <CheckBox
-                        id="_IDGenCheckBox1"
-                        text="Enemy Flying"
-                        selected="true"
-                        select="onToggleModel"
-                    >
-                        <customData>
-                            <core:CustomData
-                                key="modelKey"
-                                value="Enemy Flying"
-                            />
-                        </customData>
-                    </CheckBox>
-                    <CheckBox
-                        id="_IDGenCheckBox2"
-                        text="Enemy Large"
-                        selected="true"
-                        select="onToggleModel"
-                    >
-                        <customData>
-                            <core:CustomData
-                                key="modelKey"
-                                value="Enemy Large"
-                            />
-                        </customData>
-                    </CheckBox>
-                    <CheckBox
-                        id="_IDGenCheckBox3"
-                        text="Enemy Small"
-                        selected="true"
-                        select="onToggleModel"
-                    >
-                        <customData>
-                            <core:CustomData
-                                key="modelKey"
-                                value="Enemy Small"
-                            />
-                        </customData>
-                    </CheckBox>
-                    <CheckBox
-                        id="_IDGenCheckBox4"
-                        text="Planet"
-                        selected="true"
-                        select="onToggleModel"
-                    >
-                        <customData>
-                            <core:CustomData
-                                key="modelKey"
-                                value="Planet"
-                            />
-                        </customData>
-                    </CheckBox>
-                    <CheckBox
-                        id="_IDGenCheckBox5"
-                        text="Rock"
-                        selected="true"
-                        select="onToggleModel"
-                    >
-                        <customData>
-                            <core:CustomData
-                                key="modelKey"
-                                value="Rock"
+                                value="{test1config>name}"
                             />
                         </customData>
                     </CheckBox>
