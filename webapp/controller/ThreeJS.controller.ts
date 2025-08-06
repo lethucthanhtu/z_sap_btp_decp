@@ -285,7 +285,7 @@ export default class ThreeJS extends Controller {
 
 					// Remove object from global model for toggle controller
 					const removedId =
-						intersect.object.userData.id ?? intersect.object.uuid;
+						intersect.object.userData.id || intersect.object.uuid;
 					this._removeObjectFromModel(removedId);
 				}
 			} else {
