@@ -1,0 +1,238 @@
+{
+    "objects": [
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -275,
+                "y": 25,
+                "z": -325
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -275,
+                "y": 25,
+                "z": -275
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -275,
+                "y": 25,
+                "z": -225
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -275,
+                "y": 25,
+                "z": -175
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 275,
+                "y": 25,
+                "z": -325
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 275,
+                "y": 25,
+                "z": -275
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 275,
+                "y": 25,
+                "z": -225
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 275,
+                "y": 25,
+                "z": -175
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -375,
+                "y": 25,
+                "z": 175
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -375,
+                "y": 25,
+                "z": 225
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -325,
+                "y": 25,
+                "z": 275
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -275,
+                "y": 25,
+                "z": 325
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -225,
+                "y": 25,
+                "z": 375
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -175,
+                "y": 25,
+                "z": 375
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -125,
+                "y": 25,
+                "z": 375
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -75,
+                "y": 25,
+                "z": 425
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": -25,
+                "y": 25,
+                "z": 425
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 25,
+                "y": 25,
+                "z": 425
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 75,
+                "y": 25,
+                "z": 425
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 175,
+                "y": 25,
+                "z": 375
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 225,
+                "y": 25,
+                "z": 375
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 125,
+                "y": 25,
+                "z": 375
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 275,
+                "y": 25,
+                "z": 325
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 325,
+                "y": 25,
+                "z": 275
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 375,
+                "y": 25,
+                "z": 225
+            }
+        },
+        {
+            "type": "cube",
+            "path":"",
+            "position": {
+                "x": 375,
+                "y": 25,
+                "z": 175
+            }
+        }
+    ]
+}
