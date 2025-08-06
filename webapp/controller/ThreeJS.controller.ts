@@ -6,11 +6,15 @@ import CheckBox from 'sap/m/CheckBox';
 import Event from 'sap/ui/base/Event';
 import JSONModel from 'sap/ui/model/json/JSONModel';
 import { TObject } from 'zsapbtpdecp/types/types';
+import Button from 'sap/m/Button';
 
 /**
  * @namespace zsapbtpdecp.controller
  */
 export default class ThreeJS extends Controller {
+	private _camera!: THREE.PerspectiveCamera;
+	private _controls!: OrbitControls;
+
 	/**
 	 * global model for toggle controller
 	 */
@@ -34,17 +38,17 @@ export default class ThreeJS extends Controller {
 		if (!container) return;
 
 		const scene = this._createScene();
-		const camera = this._createCamera(container);
+		this._camera = this._createCamera(container);
 		const renderer = this._createRenderer(container);
-		const controls = this._createControls(camera, renderer);
+		this._controls = this._createControls(this._camera, renderer);
 		this._addLights(scene);
 		this._addGrid(scene);
-		this._handleContainerResize(container, camera, renderer);
+		this._handleContainerResize(container, this._camera, renderer);
 
-		this._setupInteraction(scene, camera, renderer);
+		this._setupInteraction(scene, this._camera, renderer);
 		this._loadObjects(scene);
 
-		this._startAnimationLoop(scene, camera, renderer, controls);
+		this._startAnimationLoop(scene, this._camera, renderer, this._controls);
 	}
 
 	private _getContainer(): HTMLElement | null {
@@ -167,6 +171,35 @@ export default class ThreeJS extends Controller {
 
 		const model = this._models.get(modelKey);
 		if (model) model.visible = visible;
+	}
+
+	/**
+	 * Navigate to a specific object in the scene
+	 * @param event
+	 */
+	public onNavigateToObject(event: Event): void {
+		const button = event.getSource() as Button;
+		const modelKey = button.getCustomData()[0].getValue();
+
+		const objects = this._fetchGlobalModels(
+			'3jsobject',
+			'objects'
+		) as TObject[];
+		if (!objects) {
+			console.error('Failed to fetch objects from 3jsobject model');
+			return;
+		}
+		const object3D = objects.find((o) => o.id === modelKey);
+		if (object3D) {
+			// Move camera or controls to focus on the object
+			this._controls.target.copy(object3D.position);
+			this._camera.position.set(
+				object3D.position.x + 200,
+				object3D.position.y + 200,
+				object3D.position.z + 200
+			);
+			this._controls.update();
+		}
 	}
 
 	/**
@@ -334,6 +367,9 @@ export default class ThreeJS extends Controller {
 		});
 		oModel.setProperty('/objects', objects);
 		oModel.refresh(true);
+
+		// Add the voxel to the global models map
+		this._models.set(voxel.uuid, voxel);
 	}
 
 	private _removeObjectFromModel(id: TObject['id']): void {

@@ -9,38 +9,84 @@
         title="ThreeJS View"
     >
         <content>
-            <HBox id="_IDGenHBox" height="100%">
+            <HBox
+                id="_IDGenHBox"
+                height="100%"
+            >
                 <!-- Side Panel -->
                 <ScrollContainer
                     id="_IDGenScrollContainer"
                     height="100%"
-                    width="200px"
                     vertical="true"
                     focusable="true"
-
                 >
-                    <VBox
-                        id="dynamicCheckBoxContainer"
-                        height="100%"
-                        class="sapUiSmallMargin"
-                        items="{
-                            path: '3jsobject>/objects'
-                        }"
+                    <IconTabBar
+                        id="sideTabBar"
+                        class=""
+                        expandable="false"
+                        upperCase="false"
+                        selectedKey="toggle"
                     >
-                        <CheckBox
-                            id="_IDGenCheckBox"
-                            text="{= ${3jsobject>name} || ${3jsobject>type}}"
-                            selected="true"
-                            select="onToggleModel"
-                        >
-                            <customData>
-                                <core:CustomData
-                                    key="modelKey"
-                                    value="{3jsobject>id}"
-                                />
-                            </customData>
-                        </CheckBox>
-                    </VBox>
+                        <!-- Tab 1: Toggle Visibility -->
+                        <items>
+                            <IconTabFilter
+                                id="_IDGenIconTabFilter1"
+                                key="toggle"
+                                text="Toggle"
+                                icon="sap-icon://hide"
+                            >
+                                <VBox
+                                    id="toggleContainer"
+                                    items="{
+                                        path: '3jsobject>/objects'
+                                    }"
+                                >
+                                    <CheckBox
+                                        id="_IDGenCheckBox"
+                                        text="{= ${3jsobject>name} || ${3jsobject>type}}"
+                                        selected="true"
+                                        select="onToggleModel"
+                                    >
+                                        <customData>
+                                            <core:CustomData
+                                                key="modelKey"
+                                                value="{3jsobject>id}"
+                                            />
+                                        </customData>
+                                    </CheckBox>
+                                </VBox>
+                            </IconTabFilter>
+
+                            <!-- Tab 2: Navigate -->
+                            <IconTabFilter
+                                id="_IDGenIconTabFilter2"
+                                key="navigate"
+                                text="Go To"
+                                icon="sap-icon://navigation-right-arrow"
+                            >
+                                <VBox
+                                    id="navigateContainer"
+                                    items="{
+                                        path: '3jsobject>/objects'
+                                    }"
+                                >
+                                    <Button
+                                        id="_IDGenButton2"
+                                        width="100%"
+                                        text="{= ${3jsobject>name} || ${3jsobject>type}}"
+                                        press="onNavigateToObject"
+                                    >
+                                        <customData>
+                                            <core:CustomData
+                                                key="modelKey"
+                                                value="{3jsobject>id}"
+                                            />
+                                        </customData>
+                                    </Button>
+                                </VBox>
+                            </IconTabFilter>
+                        </items>
+                    </IconTabBar>
                 </ScrollContainer>
 
                 <!-- Three.js Canvas -->
