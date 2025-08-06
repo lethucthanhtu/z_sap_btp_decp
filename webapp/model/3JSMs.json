@@ -1,0 +1,260 @@
+{
+    "objects": [
+        {
+            "id": "1",
+            "type": "cube",
+            "name": "cube 1",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -275, "y": 25, "z": -325 }
+        },
+        {
+            "id": "2",
+            "type": "cube",
+            "name": "cube 2",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -275, "y": 25, "z": -275 }
+        },
+        {
+            "id": "3",
+            "type": "cube",
+            "name": "cube 3",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -275, "y": 25, "z": -225 }
+        },
+        {
+            "id": "4",
+            "type": "cube",
+            "name": "cube 4",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -275, "y": 25, "z": -175 }
+        },
+        {
+            "id": "5",
+            "type": "cube",
+            "name": "cube 5",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 275, "y": 25, "z": -325 }
+        },
+        {
+            "id": "6",
+            "type": "cube",
+            "name": "cube 6",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 275, "y": 25, "z": -275 }
+        },
+        {
+            "id": "7",
+            "type": "cube",
+            "name": "cube 7",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 275, "y": 25, "z": -225 }
+        },
+        {
+            "id": "8",
+            "type": "cube",
+            "name": "cube 8",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 275, "y": 25, "z": -175 }
+        },
+        {
+            "id": "9",
+            "type": "cube",
+            "name": "cube 9",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -375, "y": 25, "z": 175 }
+        },
+        {
+            "id": "10",
+            "type": "cube",
+            "name": "cube 10",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -375, "y": 25, "z": 225 }
+        },
+        {
+            "id": "11",
+            "type": "cube",
+            "name": "cube 11",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -325, "y": 25, "z": 275 }
+        },
+        {
+            "id": "12",
+            "type": "cube",
+            "name": "cube 12",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -275, "y": 25, "z": 325 }
+        },
+        {
+            "id": "13",
+            "type": "cube",
+            "name": "cube 13",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -225, "y": 25, "z": 375 }
+        },
+        {
+            "id": "14",
+            "type": "cube",
+            "name": "cube 14",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -175, "y": 25, "z": 375 }
+        },
+        {
+            "id": "15",
+            "type": "cube",
+            "name": "cube 15",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -125, "y": 25, "z": 375 }
+        },
+        {
+            "id": "16",
+            "type": "cube",
+            "name": "cube 16",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -75, "y": 25, "z": 425 }
+        },
+        {
+            "id": "17",
+            "type": "cube",
+            "name": "cube 17",
+            "path": "",
+            "scale": 0,
+            "position": { "x": -25, "y": 25, "z": 425 }
+        },
+        {
+            "id": "18",
+            "type": "cube",
+            "name": "cube 18",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 25, "y": 25, "z": 425 }
+        },
+        {
+            "id": "19",
+            "type": "cube",
+            "name": "cube 19",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 75, "y": 25, "z": 425 }
+        },
+        {
+            "id": "20",
+            "type": "cube",
+            "name": "cube 20",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 175, "y": 25, "z": 375 }
+        },
+        {
+            "id": "21",
+            "type": "cube",
+            "name": "cube 21",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 225, "y": 25, "z": 375 }
+        },
+        {
+            "id": "22",
+            "type": "cube",
+            "name": "cube 22",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 125, "y": 25, "z": 375 }
+        },
+        {
+            "id": "23",
+            "type": "cube",
+            "name": "cube 23",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 275, "y": 25, "z": 325 }
+        },
+        {
+            "id": "24",
+            "type": "cube",
+            "name": "cube 24",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 325, "y": 25, "z": 275 }
+        },
+        {
+            "id": "25",
+            "type": "cube",
+            "name": "cube 25",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 375, "y": 25, "z": 225 }
+        },
+        {
+            "id": "26",
+            "type": "cube",
+            "name": "cube 26",
+            "path": "",
+            "scale": 0,
+            "position": { "x": 375, "y": 25, "z": 175 }
+        },
+        {
+            "id": "27",
+            "type": "model",
+            "name": "Astronaut",
+            "path": "/model/3JSMs/test1/Astronaut.glb",
+            "scale": 25,
+            "position": { "x": 0, "y": 0, "z": 0 }
+        },
+        {
+            "id": "28",
+            "type": "model",
+            "name": "Enemy Flying",
+            "path": "/model/3JSMs/test1/Enemy Flying.glb",
+            "scale": 25,
+            "position": { "x": 50, "y": 0, "z": 0 }
+        },
+        {
+            "id": "29",
+            "type": "model",
+            "name": "Enemy Large",
+            "path": "/model/3JSMs/test1/Enemy Large.glb",
+            "scale": 25,
+            "position": { "x": 100, "y": 0, "z": 0 }
+        },
+        {
+            "id": "30",
+            "type": "model",
+            "name": "Enemy Small",
+            "path": "/model/3JSMs/test1/Enemy Small.glb",
+            "scale": 25,
+            "position": { "x": 150, "y": 0, "z": 0 }
+        },
+        {
+            "id": "31",
+            "type": "model",
+            "name": "Planet",
+            "path": "/model/3JSMs/test1/Planet.glb",
+            "scale": 25,
+            "position": { "x": 250, "y": 25, "z": 0 }
+        },
+        {
+            "id": "32",
+            "type": "model",
+            "name": "Rock",
+            "path": "/model/3JSMs/test1/Rock.glb",
+            "scale": 25,
+            "position": { "x": 350, "y": 25, "z": 0 }
+        }
+    ]
+}

@@ -9,30 +9,39 @@
         title="ThreeJS View"
     >
         <content>
-            <HBox id="_IDGenHBox">
+            <HBox id="_IDGenHBox" height="100%">
                 <!-- Side Panel -->
-                <VBox
-                    id="dynamicCheckBoxContainer"
+                <ScrollContainer
+                    id="_IDGenScrollContainer"
+                    height="100%"
                     width="200px"
-                    class="sapUiSmallMargin"
-                    items="{
-                        path: 'test1config>/model'
-                    }"
+                    vertical="true"
+                    focusable="true"
+
                 >
-                    <CheckBox
-                        id="_IDGenCheckBox"
-                        text="{test1config>name}"
-                        selected="true"
-                        select="onToggleModel"
+                    <VBox
+                        id="dynamicCheckBoxContainer"
+                        height="100%"
+                        class="sapUiSmallMargin"
+                        items="{
+                            path: '3jsobject>/objects'
+                        }"
                     >
-                        <customData>
-                            <core:CustomData
-                                key="modelKey"
-                                value="{test1config>name}"
-                            />
-                        </customData>
-                    </CheckBox>
-                </VBox>
+                        <CheckBox
+                            id="_IDGenCheckBox"
+                            text="{= ${3jsobject>name} || ${3jsobject>type}}"
+                            selected="true"
+                            select="onToggleModel"
+                        >
+                            <customData>
+                                <core:CustomData
+                                    key="modelKey"
+                                    value="{3jsobject>id}"
+                                />
+                            </customData>
+                        </CheckBox>
+                    </VBox>
+                </ScrollContainer>
 
                 <!-- Three.js Canvas -->
                 <VBox

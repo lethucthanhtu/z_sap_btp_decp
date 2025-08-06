@@ -5,6 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import CheckBox from 'sap/m/CheckBox';
 import Event from 'sap/ui/base/Event';
 import JSONModel from 'sap/ui/model/json/JSONModel';
+import { TObject } from 'zsapbtpdecp/types/types';
 
 /**
  * @namespace zsapbtpdecp.controller
@@ -13,7 +14,7 @@ export default class ThreeJS extends Controller {
 	/**
 	 * global model for toggle controller
 	 */
-	private _models: Map<string, THREE.Object3D> = new Map();
+	private _models: Map<string, THREE.Object3D | THREE.Mesh> = new Map();
 
 	private _raycaster: THREE.Raycaster = new THREE.Raycaster();
 	private _pointer: THREE.Vector2 = new THREE.Vector2();
@@ -38,12 +39,10 @@ export default class ThreeJS extends Controller {
 		const controls = this._createControls(camera, renderer);
 		this._addLights(scene);
 		this._addGrid(scene);
-		this._loadModels(scene);
-
 		this._handleContainerResize(container, camera, renderer);
 
 		this._setupInteraction(scene, camera, renderer);
-		this._addDefaultCubes(scene);
+		this._loadObjects(scene);
 
 		this._startAnimationLoop(scene, camera, renderer, controls);
 	}
@@ -123,47 +122,6 @@ export default class ThreeJS extends Controller {
 		if (property) return oModel.getProperty(`/${property}`);
 
 		return oModel.getData();
-	}
-
-	private _loadModels(scene: THREE.Scene): void {
-		const loader = new GLTFLoader();
-
-		type TModelConfig = {
-			name: string;
-			path: string;
-		};
-		const modelConfigs: TModelConfig[] | null = this._fetchGlobalModels(
-			'test1config',
-			'model'
-		) as TModelConfig[];
-		if (!modelConfigs) {
-			console.error('Failed to fetch models');
-			return;
-		}
-
-		modelConfigs.forEach((config, index) => {
-			loader.load(
-				config.path,
-				(gltf) => {
-					const model = gltf.scene;
-					model.position.x = index * 2;
-					model.traverse((child) => {
-						if ((child as THREE.Mesh).isMesh) {
-							child.castShadow = true;
-							child.receiveShadow = true;
-						}
-					});
-					scene.add(model);
-
-					// add model to global model for toggle controller
-					this._models.set(config.name, model);
-				},
-				undefined,
-				(error) => {
-					console.error(`Error loading model at ${config.path}:`, error);
-				}
-			);
-		});
 	}
 
 	private _startAnimationLoop(
@@ -333,36 +291,86 @@ export default class ThreeJS extends Controller {
 	/**
 	 * Add default cubes to the scene at specified positions
 	 */
-	private _addDefaultCubes(scene: THREE.Scene): void {
-		type TObject = {
-			type: string;
-			path: string;
-			position: {
-				x: number;
-				y: number;
-				z: number;
-			};
-		};
-		let objs: TObject[] | null = this._fetchGlobalModels(
+	private _loadObjects(scene: THREE.Scene): void {
+		let objects: TObject[] | null = this._fetchGlobalModels(
 			'3jsobject',
 			'objects'
 		) as TObject[];
-		if (!objs) return;
-		// objs=[]
+		if (!objects) {
+			console.error('Failed to fetch objects for default cubes');
+			return;
+		}
 
 		// Convert each object's position to THREE.Vector3 and add cube
-		objs.forEach((obj) => {
-			// if (obj.type === 'cube') {
-				const pos = new THREE.Vector3(
-					obj.position.x,
-					obj.position.y,
-					obj.position.z
-				);
-				const voxel = new THREE.Mesh(this._cubeGeo, this._cubeMaterial);
-				voxel.position.copy(pos);
-				scene.add(voxel);
-				this._objects.push(voxel);
-			// }
+		objects.forEach((object, index) => {
+			switch (object.type) {
+				case 'cube':
+					this._loadObjectCUBE(object, scene);
+					break;
+
+				case 'model':
+					const fileType = object.path.split('.').pop()?.toLowerCase();
+					switch (fileType) {
+						case 'glb':
+							this._loadObjectGLTF(object, scene);
+							break;
+						default:
+							console.error(`Unsupported file type: ${fileType}`);
+							break;
+					}
+					break;
+
+				default:
+					break;
+			}
 		});
+	}
+
+	private _loadObjectCUBE(object: TObject, scene: THREE.Scene): void {
+		const pos = new THREE.Vector3(
+			object.position.x,
+			object.position.y,
+			object.position.z
+		);
+		const voxel = new THREE.Mesh(this._cubeGeo, this._cubeMaterial);
+		voxel.position.copy(pos);
+
+		scene.add(voxel);
+		this._objects.push(voxel);
+
+		// add model to global model for toggle controller
+		this._models.set(object.id, voxel);
+	}
+
+	private _loadObjectGLTF(object: TObject, scene: THREE.Scene): void {
+		const loader = new GLTFLoader();
+		loader.load(
+			object.path,
+			(gltf) => {
+				const model = gltf.scene;
+				model.position.x = object.position.x;
+				model.position.y = object.position.y;
+				model.position.z = object.position.z;
+
+				const scale = object.scale || 10;
+				if (typeof scale === 'number') model.scale.set(scale, scale, scale);
+				else model.scale.set(scale.x || 1, scale.y || 1, scale.z || 1);
+
+				model.traverse((child) => {
+					if ((child as THREE.Mesh).isMesh) {
+						child.castShadow = true;
+						child.receiveShadow = true;
+					}
+				});
+				scene.add(model);
+
+				// add model to global model for toggle controller
+				this._models.set(object.id, model);
+			},
+			undefined,
+			(error) => {
+				console.error(`Error loading model at ${object.path}:`, error);
+			}
+		);
 	}
 }

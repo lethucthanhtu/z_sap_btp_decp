@@ -61,9 +61,9 @@
           "bundleName": "zsapbtpdecp.i18n.i18n"
         }
       },
-      "test1config":{
+      "3jsobject":{
         "type": "sap.ui.model.json.JSONModel",
-        "uri": "model/3JSMs/test1/model-configs.json",
+        "uri": "model/3JSMs.json",
         "settings": {}
       }
     },
@@ -112,7 +112,7 @@
           "name": "ThreeJS"
         }
       }
-      
+
     },
     "rootView": {
       "viewName": "zsapbtpdecp.view.App",
