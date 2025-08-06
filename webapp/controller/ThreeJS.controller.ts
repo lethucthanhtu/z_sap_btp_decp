@@ -121,7 +121,7 @@ export default class ThreeJS extends Controller {
 
 		if (property) return oModel.getProperty(`/${property}`);
 
-		return oModel.getData();
+		return oModel;
 	}
 
 	private _startAnimationLoop(
@@ -254,6 +254,18 @@ export default class ThreeJS extends Controller {
 		renderer: THREE.WebGLRenderer,
 		scene: THREE.Scene
 	): void {
+		const oModel = this._fetchGlobalModels('3jsobject') as JSONModel;
+		if (!oModel) {
+			console.error('Failed to fetch 3jsobject model');
+			return;
+		}
+
+		let objects: TObject[] | null = oModel.getProperty('/objects') as TObject[];
+		if (!objects) {
+			console.error('Failed to fetch objects from 3jsobject model');
+			return;
+		}
+
 		// Convert mouse coordinates to normalized device coordinates
 		const rect = renderer.domElement.getBoundingClientRect();
 		this._pointer.set(
@@ -270,6 +282,12 @@ export default class ThreeJS extends Controller {
 				if (intersect.object !== this._plane) {
 					scene.remove(intersect.object);
 					this._objects.splice(this._objects.indexOf(intersect.object), 1);
+
+					// Remove object from global model for toggle controller
+					const removedUUID = intersect.object.uuid;
+					objects = objects.filter((obj) => obj.id !== removedUUID);
+					oModel.setProperty('/objects', objects);
+					oModel.refresh(true);
 				}
 			} else {
 				// Position the roll-over mesh or voxel at the intersection point
@@ -283,7 +301,25 @@ export default class ThreeJS extends Controller {
 
 				scene.add(voxel);
 				this._objects.push(voxel);
-				console.log(this._objects);
+
+				// Add object to global model for toggle controller
+				const newModel: TObject = {
+					id: voxel.uuid,
+					type: 'cube',
+					path: '',
+					name: `New Cube ${objects.length}`,
+					scale: 0,
+					position: {
+						x: voxel.position.x,
+						y: voxel.position.y,
+						z: voxel.position.z,
+					},
+				};
+
+				objects.push(newModel);
+
+				oModel.setProperty('/objects', objects);
+				oModel.refresh(true);
 			}
 		}
 	}
