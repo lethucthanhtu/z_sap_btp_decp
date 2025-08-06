@@ -284,10 +284,9 @@ export default class ThreeJS extends Controller {
 					this._objects.splice(this._objects.indexOf(intersect.object), 1);
 
 					// Remove object from global model for toggle controller
-					const removedUUID = intersect.object.uuid;
-					objects = objects.filter((obj) => obj.id !== removedUUID);
-					oModel.setProperty('/objects', objects);
-					oModel.refresh(true);
+					const removedId =
+						intersect.object.userData.id ?? intersect.object.uuid;
+					this._removeObjectFromModel(removedId);
 				}
 			} else {
 				// Position the roll-over mesh or voxel at the intersection point
@@ -303,25 +302,56 @@ export default class ThreeJS extends Controller {
 				this._objects.push(voxel);
 
 				// Add object to global model for toggle controller
-				const newModel: TObject = {
-					id: voxel.uuid,
-					type: 'cube',
-					path: '',
-					name: `New Cube ${objects.length}`,
-					scale: 0,
-					position: {
-						x: voxel.position.x,
-						y: voxel.position.y,
-						z: voxel.position.z,
-					},
-				};
-
-				objects.push(newModel);
-
-				oModel.setProperty('/objects', objects);
-				oModel.refresh(true);
+				this._addObjectToModel(voxel);
 			}
 		}
+	}
+
+	private _addObjectToModel(voxel: THREE.Mesh): void {
+		const oModel = this._fetchGlobalModels('3jsobject') as JSONModel;
+		if (!oModel) {
+			console.error('Failed to fetch 3jsobject model');
+			return;
+		}
+
+		let objects: TObject[] | null = oModel.getProperty('/objects') as TObject[];
+		if (!objects) {
+			console.error('Failed to fetch objects from 3jsobject model');
+			return;
+		}
+
+		objects.push({
+			id: voxel.uuid,
+			type: 'cube',
+			path: '',
+			name: `cube ${objects.length}`,
+			scale: 0,
+			position: {
+				x: voxel.position.x,
+				y: voxel.position.y,
+				z: voxel.position.z,
+			},
+		});
+		oModel.setProperty('/objects', objects);
+		oModel.refresh(true);
+	}
+
+	private _removeObjectFromModel(id: TObject['id']): void {
+		const oModel = this._fetchGlobalModels('3jsobject') as JSONModel;
+		if (!oModel) {
+			console.error('Failed to fetch 3jsobject model');
+			return;
+		}
+
+		let objects: TObject[] | null = oModel.getProperty('/objects') as TObject[];
+		if (!objects) {
+			console.error('Failed to fetch objects from 3jsobject model');
+			return;
+		}
+
+		objects = objects.filter((obj) => obj.id !== id);
+		oModel.setProperty('/objects', objects);
+		oModel.refresh(true);
 	}
 
 	/**
@@ -369,6 +399,7 @@ export default class ThreeJS extends Controller {
 			object.position.z
 		);
 		const voxel = new THREE.Mesh(this._cubeGeo, this._cubeMaterial);
+		voxel.userData.id = object.id;
 		voxel.position.copy(pos);
 
 		scene.add(voxel);
