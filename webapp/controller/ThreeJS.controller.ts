@@ -273,6 +273,7 @@ export default class ThreeJS extends ThreeJSRootController {
 			path: '',
 			name: `cube ${this._3JSData.length}`,
 			scale: 0,
+			visible: true,
 			position: {
 				x: voxel.position.x,
 				y: voxel.position.y,
@@ -323,6 +324,9 @@ export default class ThreeJS extends ThreeJSRootController {
 					break;
 			}
 		});
+
+		console.log('mesh data: ',this._objects);
+		
 	}
 
 	/**
