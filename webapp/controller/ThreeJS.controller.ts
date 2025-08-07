@@ -343,6 +343,7 @@ export default class ThreeJS extends ThreeJSRootController {
 		const voxel = new THREE.Mesh(this._cubeGeo, this._cubeMaterial);
 		voxel.userData.id = object.id;
 		voxel.position.copy(pos);
+		voxel.visible = object.visible;
 
 		scene.add(voxel);
 		this._objects.push(voxel);
@@ -376,6 +377,8 @@ export default class ThreeJS extends ThreeJSRootController {
 						child.receiveShadow = true;
 					}
 				});
+				model.visible = object.visible;
+
 				scene.add(model);
 
 				// add model to global model for toggle controller
