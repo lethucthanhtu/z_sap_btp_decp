@@ -12,27 +12,88 @@ import Button from 'sap/m/Button';
  * @namespace zsapbtpdecp.controller
  */
 export default class ThreeJS extends Controller {
-	private _camera!: THREE.PerspectiveCamera;
-	private _controls!: OrbitControls;
+	/**
+	 * Name of the global JSON model.
+	 */
+	private static readonly MODEL_NAME = '3jsobject';
+	/**
+	 * Path to the objects array in the model.
+	 */
+	private static readonly MODEL_PROP = '/objects';
+	/**
+	 * ID of the HTML canvas element used for rendering.
+	 */
+	private static readonly CANVAS_ID = 'threejs-canvas';
 
 	/**
-	 * global model for toggle controller
+	 * JSONModel instance holding 3D object data.
 	 */
-	private _models: Map<string, THREE.Object3D | THREE.Mesh> = new Map();
-
-	private _raycaster: THREE.Raycaster = new THREE.Raycaster();
-	private _pointer: THREE.Vector2 = new THREE.Vector2();
-	private _isShiftDown: boolean = false;
-	private _rollOverMesh!: THREE.Mesh;
-	private _cubeGeo!: THREE.BoxGeometry;
-	private _cubeMaterial!: THREE.MeshLambertMaterial;
+	private _3JSModel!: JSONModel;
+	/**
+	 * Array of objects representing 3D elements.
+	 */
+	private _3JSData!: TObject[];
+	/**
+	 * - global model for toggle controller
+	 * - Map of object IDs to their corresponding Three.js objects.
+	 */
+	private _modelMaps: Map<string, THREE.Object3D | THREE.Mesh> = new Map();
+	/**
+	 * Array of all Three.js objects in the scene.
+	 */
 	private _objects: THREE.Object3D[] = [];
+
+	/**
+	 * Core Three.js components for rendering and interaction.
+	 */
+	private _camera!: THREE.PerspectiveCamera;
+	/**
+	 * Core Three.js components for rendering and interaction.
+	 */
+	private _controls!: OrbitControls;
+	/**
+	 * Core Three.js components for rendering and interaction.
+	 */
+	private _raycaster: THREE.Raycaster = new THREE.Raycaster();
+	/**
+	 * Core Three.js components for rendering and interaction.
+	 */
+	private _pointer: THREE.Vector2 = new THREE.Vector2();
+	
+	/**
+	 * Tracks whether the Shift key is pressed.
+	 */
+	private _isShiftDown: boolean = false;
+
+	/**
+	 * Meshes and geometries used for voxel interaction.
+	 */
+	private _rollOverMesh!: THREE.Mesh;
+	/**
+	 * Meshes and geometries used for voxel interaction.
+	 */
+	private _cubeGeo!: THREE.BoxGeometry;
+	/**
+	 * Meshes and geometries used for voxel interaction.
+ 	 */
+	private _cubeMaterial!: THREE.MeshLambertMaterial;
+	/**
+	 * Meshes and geometries used for voxel interaction.
+	 */
 	private _plane!: THREE.Mesh;
+
+	public onInit(): void | undefined {
+		this._updateGlobalModel()
+	}
 
 	public onAfterRendering(): void {
 		this._initThreeJS();
 	}
 
+	/**
+	 * Initializes the scene, camera, renderer, controls, lights, grid, interaction handlers, and starts the animation loop.
+	 * @returns
+	 */
 	private _initThreeJS(): void {
 		const container = this._getContainer();
 		if (!container) return;
@@ -51,19 +112,32 @@ export default class ThreeJS extends Controller {
 		this._startAnimationLoop(scene, this._camera, renderer, this._controls);
 	}
 
+	/**
+	 * Retrieves the canvas container element.
+	 * @returns
+	 */
 	private _getContainer(): HTMLElement | null {
-		const container = document.getElementById('threejs-canvas');
+		const container = document.getElementById(ThreeJS.CANVAS_ID);
 		if (!container) console.error('Three.js container not found.');
 
 		return container;
 	}
 
+	/**
+	 * Creates and configures the Three.js scene.
+	 * @returns
+	 */
 	private _createScene(): THREE.Scene {
 		const scene = new THREE.Scene();
 		scene.background = new THREE.Color(0xf0f0f0);
 		return scene;
 	}
 
+	/**
+	 * Sets up the perspective camera.
+	 * @param container
+	 * @returns
+	 */
 	private _createCamera(container: HTMLElement): THREE.PerspectiveCamera {
 		let aspect = container.clientWidth / container.clientHeight;
 		const camera = new THREE.PerspectiveCamera(75, aspect, 1, 10000);
@@ -72,6 +146,11 @@ export default class ThreeJS extends Controller {
 		return camera;
 	}
 
+	/**
+	 * Initializes the WebGL renderer.
+	 * @param container
+	 * @returns
+	 */
 	private _createRenderer(container: HTMLElement): THREE.WebGLRenderer {
 		const renderer = new THREE.WebGLRenderer({ antialias: true });
 		renderer.setSize(container.clientWidth, container.clientHeight);
@@ -81,6 +160,12 @@ export default class ThreeJS extends Controller {
 		return renderer;
 	}
 
+	/**
+	 * Adds orbit controls for camera movement.
+	 * @param camera
+	 * @param renderer
+	 * @returns
+	 */
 	private _createControls(
 		camera: THREE.Camera,
 		renderer: THREE.WebGLRenderer
@@ -94,6 +179,10 @@ export default class ThreeJS extends Controller {
 		return controls;
 	}
 
+	/**
+	 * Adds a grid helper to the scene.
+	 * @param scene
+	 */
 	private _addGrid(scene: THREE.Scene): void {
 		const size = 1000;
 		const division = 20;
@@ -101,6 +190,10 @@ export default class ThreeJS extends Controller {
 		scene.add(gridHelper);
 	}
 
+	/**
+	 * Adds hemisphere, directional, and ambient lights.
+	 * @param scene
+	 */
 	private _addLights(scene: THREE.Scene): void {
 		const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.5);
 		hemiLight.position.set(0, 20, 0);
@@ -116,6 +209,21 @@ export default class ThreeJS extends Controller {
 		scene.add(ambientLight);
 	}
 
+	/**
+	 * Refreshes the local model and data from the global model.
+	 */
+	private _updateGlobalModel(): void { 
+		this._3JSModel = this._fetchGlobalModels(ThreeJS.MODEL_NAME) as JSONModel;
+		this._3JSData = this._3JSModel.getProperty(ThreeJS.MODEL_PROP)
+	}
+
+	/**
+	 * - Minimize the code to fetch the model
+	 * - Utility to fetch model or property from the component.
+	 * @param modelName
+	 * @param property
+	 * @returns
+	 */
 	private _fetchGlobalModels(modelName: string, property?: string) {
 		const oComponent = this.getOwnerComponent();
 		if (!oComponent) return null;
@@ -128,6 +236,13 @@ export default class ThreeJS extends Controller {
 		return oModel;
 	}
 
+	/**
+	 * Continuously renders the scene.
+	 * @param scene
+	 * @param camera
+	 * @param renderer
+	 * @param controls
+	 */
 	private _startAnimationLoop(
 		scene: THREE.Scene,
 		camera: THREE.Camera,
@@ -169,7 +284,7 @@ export default class ThreeJS extends Controller {
 		const modelKey = checkbox.getCustomData()[0].getValue();
 		const visible = checkbox.getSelected();
 
-		const model = this._models.get(modelKey);
+		const model = this._modelMaps.get(modelKey);
 		if (model) model.visible = visible;
 	}
 
@@ -181,15 +296,8 @@ export default class ThreeJS extends Controller {
 		const button = event.getSource() as Button;
 		const modelKey = button.getCustomData()[0].getValue();
 
-		const objects = this._fetchGlobalModels(
-			'3jsobject',
-			'objects'
-		) as TObject[];
-		if (!objects) {
-			console.error('Failed to fetch objects from 3jsobject model');
-			return;
-		}
-		const object3D = objects.find((o) => o.id === modelKey);
+		this._updateGlobalModel();
+		const object3D = this._3JSData.find((o) => o.id === modelKey);
 		if (object3D) {
 			// Move camera or controls to focus on the object
 			this._controls.target.copy(object3D.position);
@@ -252,6 +360,13 @@ export default class ThreeJS extends Controller {
 		});
 	}
 
+	/**
+	 * Updates roll-over mesh position based on mouse movement.
+	 * @param event
+	 * @param camera
+	 * @param renderer
+	 * @param scene
+	 */
 	private _onPointerMove(
 		event: PointerEvent,
 		camera: THREE.Camera,
@@ -281,24 +396,21 @@ export default class ThreeJS extends Controller {
 		}
 	}
 
+	/**
+	 * Adds or removes voxels based on click and Shift key state.
+	 * @param event
+	 *
+	 * @param camera
+	 * @param renderer
+	 * @param scene
+	 * @returns
+	 */
 	private _onPointerDown(
 		event: PointerEvent,
 		camera: THREE.Camera,
 		renderer: THREE.WebGLRenderer,
 		scene: THREE.Scene
 	): void {
-		const oModel = this._fetchGlobalModels('3jsobject') as JSONModel;
-		if (!oModel) {
-			console.error('Failed to fetch 3jsobject model');
-			return;
-		}
-
-		let objects: TObject[] | null = oModel.getProperty('/objects') as TObject[];
-		if (!objects) {
-			console.error('Failed to fetch objects from 3jsobject model');
-			return;
-		}
-
 		// Convert mouse coordinates to normalized device coordinates
 		const rect = renderer.domElement.getBoundingClientRect();
 		this._pointer.set(
@@ -340,24 +452,18 @@ export default class ThreeJS extends Controller {
 		}
 	}
 
+	/**
+	 *
+	 * @param voxel
+	 * @returns
+	 */
 	private _addObjectToModel(voxel: THREE.Mesh): void {
-		const oModel = this._fetchGlobalModels('3jsobject') as JSONModel;
-		if (!oModel) {
-			console.error('Failed to fetch 3jsobject model');
-			return;
-		}
-
-		let objects: TObject[] | null = oModel.getProperty('/objects') as TObject[];
-		if (!objects) {
-			console.error('Failed to fetch objects from 3jsobject model');
-			return;
-		}
-
-		objects.push({
+		this._updateGlobalModel();
+		this._3JSData.push({
 			id: voxel.uuid,
 			type: 'cube',
 			path: '',
-			name: `cube ${objects.length}`,
+			name: `cube ${this._3JSData.length}`,
 			scale: 0,
 			position: {
 				x: voxel.position.x,
@@ -365,46 +471,27 @@ export default class ThreeJS extends Controller {
 				z: voxel.position.z,
 			},
 		});
-		oModel.setProperty('/objects', objects);
-		oModel.refresh(true);
+		this._3JSModel.setProperty(ThreeJS.MODEL_PROP, this._3JSData);
+		this._3JSModel.refresh(true);
 
 		// Add the voxel to the global models map
-		this._models.set(voxel.uuid, voxel);
+		this._modelMaps.set(voxel.uuid, voxel);
 	}
 
 	private _removeObjectFromModel(id: TObject['id']): void {
-		const oModel = this._fetchGlobalModels('3jsobject') as JSONModel;
-		if (!oModel) {
-			console.error('Failed to fetch 3jsobject model');
-			return;
-		}
+		this._updateGlobalModel();
 
-		let objects: TObject[] | null = oModel.getProperty('/objects') as TObject[];
-		if (!objects) {
-			console.error('Failed to fetch objects from 3jsobject model');
-			return;
-		}
-
-		objects = objects.filter((obj) => obj.id !== id);
-		oModel.setProperty('/objects', objects);
-		oModel.refresh(true);
+		this._3JSData = this._3JSData.filter((obj) => obj.id !== id);
+		this._3JSModel.setProperty(ThreeJS.MODEL_PROP, this._3JSData);
+		this._3JSModel.refresh(true);
 	}
 
 	/**
-	 * Add default cubes to the scene at specified positions
+	 * Load all objects in model to the scene at specified positions
 	 */
 	private _loadObjects(scene: THREE.Scene): void {
-		let objects: TObject[] | null = this._fetchGlobalModels(
-			'3jsobject',
-			'objects'
-		) as TObject[];
-		if (!objects) {
-			console.error('Failed to fetch objects for default cubes');
-			return;
-		}
-
 		// Convert each object's position to THREE.Vector3 and add cube
-		objects.forEach((object, index) => {
+		this._3JSData.forEach((object, index) => {
 			switch (object.type) {
 				case 'cube':
 					this._loadObjectCUBE(object, scene);
@@ -428,6 +515,11 @@ export default class ThreeJS extends Controller {
 		});
 	}
 
+	/**
+	 * Load cube from model
+	 * @param object
+	 * @param scene
+	 */
 	private _loadObjectCUBE(object: TObject, scene: THREE.Scene): void {
 		const pos = new THREE.Vector3(
 			object.position.x,
@@ -442,9 +534,14 @@ export default class ThreeJS extends Controller {
 		this._objects.push(voxel);
 
 		// add model to global model for toggle controller
-		this._models.set(object.id, voxel);
+		this._modelMaps.set(object.id, voxel);
 	}
 
+	/**
+	 * Load GLTF Object from model
+	 * @param object
+	 * @param scene
+	 */
 	private _loadObjectGLTF(object: TObject, scene: THREE.Scene): void {
 		const loader = new GLTFLoader();
 		loader.load(
@@ -468,7 +565,7 @@ export default class ThreeJS extends Controller {
 				scene.add(model);
 
 				// add model to global model for toggle controller
-				this._models.set(object.id, model);
+				this._modelMaps.set(object.id, model);
 			},
 			undefined,
 			(error) => {
