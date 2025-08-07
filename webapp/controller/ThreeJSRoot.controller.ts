@@ -169,7 +169,7 @@ export default class ThreeJSRootController extends Controller {
 		const oModel = oComponent.getModel(modelName) as JSONModel;
 		if (!oModel) return null;
 
-		if (property) return oModel.getProperty(`/${property}`);
+		if (property) return oModel.getProperty(`${property}`);
 
 		return oModel;
 	}

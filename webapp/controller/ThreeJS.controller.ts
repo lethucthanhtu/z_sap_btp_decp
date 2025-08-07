@@ -6,6 +6,7 @@ import JSONModel from 'sap/ui/model/json/JSONModel';
 import { TObject } from 'zsapbtpdecp/types/types';
 import Button from 'sap/m/Button';
 import ThreeJSRootController from './ThreeJSRoot.controller';
+import BindingMode from 'sap/ui/model/BindingMode';
 
 /**
  * @namespace zsapbtpdecp.controller
@@ -48,6 +49,8 @@ export default class ThreeJS extends ThreeJSRootController {
 
 	public onInit(): void | undefined {
 		this._updateGlobalModel();
+		this._3JSModel.setDefaultBindingMode(BindingMode.TwoWay);
+		this._3JSModel.setSizeLimit(100000);
 	}
 
 	public onAfterRendering(): void | undefined {
@@ -105,16 +108,61 @@ export default class ThreeJS extends ThreeJSRootController {
 
 		this._updateGlobalModel();
 		const object3D = this._3JSData.find((o) => o.id === modelKey);
-		if (object3D) {
-			// Move camera or controls to focus on the object
-			this.controls.target.copy(object3D.position);
-			this.camera.position.set(
-				object3D.position.x + 200,
-				object3D.position.y + 200,
-				object3D.position.z + 200
-			);
-			this.controls.update();
+		if (!object3D) {
+			console.error(`Object with ID ${modelKey} not found in the model.`);
+			return;
 		}
+
+		// Make object glow
+		if (object3D.type === 'cube') {
+			const model = this._modelMaps.get(modelKey);
+			if (model && model instanceof THREE.Mesh)
+				this._setMeshFlash(model, 0xff0000, 1000);
+		}
+
+		// Move camera or controls to focus on the object
+		this.controls.target.copy(object3D.position);
+		this.camera.position.set(
+			object3D.position.x + 200,
+			object3D.position.y + 200,
+			object3D.position.z + 200
+		);
+		this.controls.update();
+	}
+
+	/**
+	 * Make Mesh object flash with a color for a specified timeout
+	 * @param object
+	 * @param color
+	 * @param timeout
+	 * @returns
+	 */
+	private _setMeshFlash(
+		object: THREE.Mesh,
+		color: number,
+		timeout: number
+	): void {
+		// Ensure the material supports emissive (e.g., MeshStandardMaterial, MeshPhongMaterial)
+		const originalMaterial = object.material as THREE.MeshStandardMaterial;
+		if (!originalMaterial.emissive) {
+			console.warn('Material does not support emissive property.');
+			return;
+		}
+
+		// Clone material to avoid affecting other meshes using the same material
+		const clonedMaterial = originalMaterial.clone();
+		object.material = clonedMaterial;
+
+		// Save the original emissive color
+		const originalEmissive = clonedMaterial.emissive.clone();
+
+		// Apply glow color
+		clonedMaterial.emissive.setHex(color);
+
+		// Restore after timeout
+		setTimeout(() => {
+			clonedMaterial.emissive.copy(originalEmissive);
+		}, timeout);
 	}
 
 	/**
@@ -266,7 +314,6 @@ export default class ThreeJS extends ThreeJSRootController {
 	 * @returns
 	 */
 	private _addObjectToModel(voxel: THREE.Mesh): void {
-		this._updateGlobalModel();
 		this._3JSData.push({
 			id: voxel.uuid,
 			type: 'cube',
@@ -292,8 +339,6 @@ export default class ThreeJS extends ThreeJSRootController {
 	 * @param id
 	 */
 	private _removeObjectFromModel(id: TObject['id']): void {
-		this._updateGlobalModel();
-
 		this._3JSData = this._3JSData.filter((obj) => obj.id !== id);
 		this._3JSModel.setProperty(ThreeJS.MODEL_PROP, this._3JSData);
 		this._3JSModel.refresh(true);
@@ -325,8 +370,7 @@ export default class ThreeJS extends ThreeJSRootController {
 			}
 		});
 
-		console.log('mesh data: ',this._objects);
-		
+		console.log('mesh data: ', this._objects);
 	}
 
 	/**
