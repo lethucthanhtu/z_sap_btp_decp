@@ -26,7 +26,10 @@
     "eslint-plugin-fiori-custom": "2.6.7",
     "typescript": "^5.1.6",
     "ui5-tooling-modules": "^3.29.0",
-    "ui5-tooling-transpile": "^3.3.7"
+    "ui5-tooling-transpile": "^3.3.7",
+    "ui5-task-zipper": "^3.4.x",
+    "rimraf": "^5.0.5",
+    "mbt": "^1.2.29"
   },
   "ui5": {
     "dependencies": [
@@ -42,12 +45,15 @@
     "ts-trace": "tsc --traceResolution > traceResolution.log",
     "prestart": "npm run ts-typecheck",
     "prebuild": "npm run ts-typecheck",
-    "deploy": "fiori verify",
+    "deploy": "fiori cfDeploy",
     "deploy-config": "fiori add deploy-config",
     "start-noflp": "fiori run --open \"index.html?sap-ui-xx-viewCache=false\"",
     "int-test": "fiori run --open 'test/integration/opaTests.qunit.html'",
     "start-variants-management": "fiori run --open \"preview.html#app-preview\"",
-    "unit-test": "fiori run --open 'test/unit/unitTests.qunit.html'"
+    "unit-test": "fiori run --open 'test/unit/unitTests.qunit.html'",
+    "build:cf": "ui5 build preload --clean-dest --config ui5-deploy.yaml --include-task=generateCachebusterInfo",
+    "build:mta": "rimraf resources mta_archives && mbt build",
+    "undeploy": "cf undeploy zsapbtpdecp --delete-services --delete-service-keys --delete-service-brokers"
   },
   "sapuxLayer": "CUSTOMER_BASE"
 }
