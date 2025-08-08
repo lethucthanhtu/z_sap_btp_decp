@@ -13,6 +13,7 @@ import Viewer from 'sap/ui/vk/Viewer';
  * @namespace zsapbtpdecp.controller
  */
 export default class MainView extends Controller {
+    
 
     /*eslint-disable @typescript-eslint/no-empty-function*/
     public onInit(): void {
