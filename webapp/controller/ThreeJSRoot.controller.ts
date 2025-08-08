@@ -81,7 +81,7 @@ export default class ThreeJSRootController extends Controller {
 		controls.enableDamping = true;
 		controls.dampingFactor = 0.05;
 		controls.enableZoom = true;
-		controls.enablePan = false;
+		controls.enablePan = true;
 		return controls;
 	}
 
