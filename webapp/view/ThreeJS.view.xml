@@ -97,7 +97,7 @@
                 >
                     <core:HTML
                         id="threeContainer"
-                        content="&lt;div id='threejs-canvas' style='width:100%; height:500px;'&gt;&lt;/div&gt;"
+                        content="&lt;div id='threejs-canvas' style='width:100%; height:85vh;'&gt;&lt;/div&gt;"
                     />
                 </VBox>
             </HBox>
