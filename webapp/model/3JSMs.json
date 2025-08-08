@@ -1394,15 +1394,6 @@
 			"path": "",
 			"visible": true,
 			"position": { "x": -425, "y": 225, "z": 325 }
-		},
-		{
-			"id": "12d2fc2c-14f1-4c47-8e51-f1ac0e00c6ec",
-			"type": "cube",
-			"name": "cube 150",
-			"scale": 0,
-			"path": "",
-			"visible": true,
-			"position": { "x": -375, "y": 25, "z": 475 }
 		}
 	]
 }
