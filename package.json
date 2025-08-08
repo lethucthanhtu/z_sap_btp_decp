@@ -33,13 +33,17 @@
   },
   "ui5": {
     "dependencies": [
-      "ui5-tooling-modules"
+      "ui5-tooling-modules",
+      "three",
+      "@types/thre",
+      "qunit",
+      "@sapui5/type"
     ]
   },
   "scripts": {
     "start": "fiori run --open \"test/flp.html#app-preview\"",
     "start-local": "fiori run --config ./ui5-local.yaml --open \"test/flp.html#app-preview\"",
-    "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist",
+    "build": "ui5 build self-contained --all --config=ui5.yaml --clean-dest --dest dist",
     "lint": "eslint ./",
     "ts-typecheck": "tsc --noEmit --skipLibCheck",
     "ts-trace": "tsc --traceResolution > traceResolution.log",
