@@ -71,13 +71,21 @@ export default class ThreeJS extends ThreeJSRootController {
 		this.camera = this.createCamera(container);
 		const renderer = this.createRenderer(container);
 		this.controls = this.createControls(this.camera, renderer);
-		this.addLights(scene);
-		this.addGrid(scene);
+
+		// Can Omit if necessary
+		this.addLights(scene); // Add lighting
+		this.addGrid(scene);   // Add gird
+
+		// Dynamic container width
 		this.handleContainerResize(container, this.camera, renderer);
 
+		// Handle Camera movement
 		this._setupInteraction(scene, this.camera, renderer);
+
+		// Custom object loader
 		this._loadObjects(scene);
 
+		// Render 3D Viewer
 		this.startAnimationLoop(scene, this.camera, renderer, this.controls);
 	}
 
@@ -102,6 +110,7 @@ export default class ThreeJS extends ThreeJSRootController {
 		const button = event.getSource() as Button;
 		const modelKey = button.getCustomData()[0].getValue();
 
+		// Find Object in Model's Data
 		const object3D = this._3JSData.find((o) => o.id === modelKey);
 		if (!object3D) {
 			console.error(`Object with ID ${modelKey} not found in the model.`);
@@ -171,6 +180,7 @@ export default class ThreeJS extends ThreeJSRootController {
 		camera: THREE.Camera,
 		renderer: THREE.WebGLRenderer
 	): void {
+		// Mesh placeholer (Red box)
 		const rollOverGeo = new THREE.BoxGeometry(50, 50, 50);
 		const rollOverMaterial = new THREE.MeshBasicMaterial({
 			color: 0xff0000,
@@ -180,6 +190,7 @@ export default class ThreeJS extends ThreeJSRootController {
 		this._rollOverMesh = new THREE.Mesh(rollOverGeo, rollOverMaterial);
 		scene.add(this._rollOverMesh);
 
+		// Add texture to Mesh object
 		const texture = new THREE.TextureLoader().load(ThreeJS.TEXTURE);
 		texture.colorSpace = THREE.SRGBColorSpace;
 		this._cubeGeo = new THREE.BoxGeometry(50, 50, 50);
@@ -188,6 +199,7 @@ export default class ThreeJS extends ThreeJSRootController {
 			map: texture,
 		});
 
+		//
 		const geometry = new THREE.PlaneGeometry(1000, 1000);
 		geometry.rotateX(-Math.PI / 2);
 		this._plane = new THREE.Mesh(
@@ -197,6 +209,7 @@ export default class ThreeJS extends ThreeJSRootController {
 		scene.add(this._plane);
 		this._objects.push(this._plane);
 
+		// Handle key press event
 		document.addEventListener('pointermove', (e) =>
 			this._onPointerMove(e, camera, renderer, scene)
 		);
@@ -230,6 +243,7 @@ export default class ThreeJS extends ThreeJSRootController {
 			((event.clientX - rect.left) / rect.width) * 2 - 1,
 			-((event.clientY - rect.top) / rect.height) * 2 + 1
 		);
+
 		// Set raycaster from camera and pointer
 		this.raycaster.setFromCamera(this.pointer, camera);
 		const intersects = this.raycaster.intersectObjects(this._objects, false);
@@ -268,6 +282,7 @@ export default class ThreeJS extends ThreeJSRootController {
 			((event.clientX - rect.left) / rect.width) * 2 - 1,
 			-((event.clientY - rect.top) / rect.height) * 2 + 1
 		);
+
 		// Set raycaster from camera and pointer
 		this.raycaster.setFromCamera(this.pointer, camera);
 		const intersects = this.raycaster.intersectObjects(this._objects, false);
@@ -293,10 +308,11 @@ export default class ThreeJS extends ThreeJSRootController {
 					.floor()
 					.multiplyScalar(50)
 					.addScalar(25);
-
 				scene.add(voxel);
-				this._objects.push(voxel);
 
+				//
+				this._objects.push(voxel);
+				
 				// Add object to global model for toggle controller
 				this._addObjectToModel(voxel);
 			}
@@ -309,6 +325,7 @@ export default class ThreeJS extends ThreeJSRootController {
 	 * @returns
 	 */
 	private _addObjectToModel(voxel: THREE.Mesh): void {
+		// Add new object to Model's Data
 		this._3JSData.push({
 			id: voxel.uuid,
 			type: 'cube',
@@ -360,11 +377,17 @@ export default class ThreeJS extends ThreeJSRootController {
 					}
 					break;
 
+				// Future type
+				// case '':
+				// 	break;
+
 				default:
+					console.error(`Unsupported Object type: ${object.type}`);
 					break;
 			}
 		});
 
+		// Mesh Data to convert to 3JSMs.json
 		console.log('mesh data: ', this._objects);
 	}
 
@@ -385,6 +408,8 @@ export default class ThreeJS extends ThreeJSRootController {
 		voxel.visible = object.visible;
 
 		scene.add(voxel);
+
+		//
 		this._objects.push(voxel);
 
 		// add model to global model for toggle controller
@@ -417,7 +442,6 @@ export default class ThreeJS extends ThreeJSRootController {
 					}
 				});
 				model.visible = object.visible;
-
 				scene.add(model);
 
 				// add model to global model for toggle controller
