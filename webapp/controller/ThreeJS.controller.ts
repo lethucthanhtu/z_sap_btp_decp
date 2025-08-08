@@ -48,7 +48,9 @@ export default class ThreeJS extends ThreeJSRootController {
 	private _plane!: THREE.Mesh;
 
 	public onInit(): void | undefined {
-		this._updateGlobalModel();
+		this._3JSModel = this.fetchGlobalModels(ThreeJS.MODEL_NAME) as JSONModel;
+		this._3JSData = this._3JSModel.getProperty(ThreeJS.MODEL_PROP);
+
 		this._3JSModel.setDefaultBindingMode(BindingMode.TwoWay);
 		this._3JSModel.setSizeLimit(100000);
 	}
@@ -79,12 +81,6 @@ export default class ThreeJS extends ThreeJSRootController {
 		this.startAnimationLoop(scene, this.camera, renderer, this.controls);
 	}
 
-	/** Refreshes the local model and data from the global model. */
-	private _updateGlobalModel(): void {
-		this._3JSModel = this.fetchGlobalModels(ThreeJS.MODEL_NAME) as JSONModel;
-		this._3JSData = this._3JSModel.getProperty(ThreeJS.MODEL_PROP);
-	}
-
 	/**
 	 * Toggle on/off object(s) controller
 	 * @param event
@@ -106,7 +102,6 @@ export default class ThreeJS extends ThreeJSRootController {
 		const button = event.getSource() as Button;
 		const modelKey = button.getCustomData()[0].getValue();
 
-		this._updateGlobalModel();
 		const object3D = this._3JSData.find((o) => o.id === modelKey);
 		if (!object3D) {
 			console.error(`Object with ID ${modelKey} not found in the model.`);
