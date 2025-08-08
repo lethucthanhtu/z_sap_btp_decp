@@ -9,7 +9,7 @@ server:
     - name: fiori-tools-proxy
       afterMiddleware: compression
       configuration:
-        ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ignoreCertError: false
         ui5:
           path:
             - /resources
@@ -36,6 +36,13 @@ server:
           - /Component-preload.js
     - name: ui5-tooling-modules-middleware
       afterMiddleware: compression
+      configuration:
+        framework: SAPUI5
+        version: 1.138.0
+        addModules:
+          - three
+        prependPathMappings: true
+        debug: true
 builder:
   customTasks:
     - name: ui5-tooling-transpile-task
@@ -45,8 +52,11 @@ builder:
         transformModulesToUI5:
           overridesToOverride: true
     - name: ui5-tooling-modules-task
-      afterTask: replaceVersion
+      afterTask: ui5-tooling-transpile-task
       configuration:
+        framework: SAPUI5
+        version: 1.138.0
         addModules:
-         - three
+          - three
         prependPathMappings: true
+        debug: true
