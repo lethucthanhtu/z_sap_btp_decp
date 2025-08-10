@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import CheckBox from 'sap/m/CheckBox';
 import Event from 'sap/ui/base/Event';
 import JSONModel from 'sap/ui/model/json/JSONModel';
@@ -48,9 +48,12 @@ export default class ThreeJS extends ThreeJSRootController {
 	private _plane!: THREE.Mesh;
 
 	public onInit(): void | undefined {
+		// Fetch model from global models
 		this._3JSModel = this.fetchGlobalModels(ThreeJS.MODEL_NAME) as JSONModel;
+		// Fetch data from model
 		this._3JSData = this._3JSModel.getProperty(ThreeJS.MODEL_PROP);
 
+		// Model config
 		this._3JSModel.setDefaultBindingMode(BindingMode.TwoWay);
 		this._3JSModel.setSizeLimit(100000);
 	}
@@ -74,7 +77,7 @@ export default class ThreeJS extends ThreeJSRootController {
 
 		// Can Omit if necessary
 		this.addLights(scene); // Add lighting
-		this.addGrid(scene);   // Add gird
+		this.addGrid(scene); // Add gird
 
 		// Dynamic container width
 		this.handleContainerResize(container, this.camera, renderer);
@@ -207,6 +210,8 @@ export default class ThreeJS extends ThreeJSRootController {
 			new THREE.MeshBasicMaterial({ visible: false })
 		);
 		scene.add(this._plane);
+
+		//
 		this._objects.push(this._plane);
 
 		// Handle key press event
@@ -312,7 +317,7 @@ export default class ThreeJS extends ThreeJSRootController {
 
 				//
 				this._objects.push(voxel);
-				
+
 				// Add object to global model for toggle controller
 				this._addObjectToModel(voxel);
 			}
@@ -371,6 +376,11 @@ export default class ThreeJS extends ThreeJSRootController {
 						case 'glb':
 							this._loadObjectGLTF(object, scene);
 							break;
+
+						// Future type
+						// case '':
+						// 	break;
+
 						default:
 							console.error(`Unsupported file type: ${fileType}`);
 							break;
@@ -431,9 +441,17 @@ export default class ThreeJS extends ThreeJSRootController {
 				model.position.y = object.position.y;
 				model.position.z = object.position.z;
 
-				const scale = object.scale || 10;
+				// Fallback for scale
+				const defaultScale = 10;
+				// Set scale based on object data or default value
+				const scale = object.scale || defaultScale;
 				if (typeof scale === 'number') model.scale.set(scale, scale, scale);
-				else model.scale.set(scale.x || 1, scale.y || 1, scale.z || 1);
+				else
+					model.scale.set(
+						scale.x || defaultScale,
+						scale.y || defaultScale,
+						scale.z || defaultScale
+					);
 
 				model.traverse((child) => {
 					if ((child as THREE.Mesh).isMesh) {

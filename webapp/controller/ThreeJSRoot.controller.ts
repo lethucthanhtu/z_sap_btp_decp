@@ -1,6 +1,6 @@
 import Controller from 'sap/ui/core/mvc/Controller';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import JSONModel from 'sap/ui/model/json/JSONModel';
 
 /**
