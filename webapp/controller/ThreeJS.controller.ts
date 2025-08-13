@@ -3,7 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import CheckBox from 'sap/m/CheckBox';
 import Event from 'sap/ui/base/Event';
 import JSONModel from 'sap/ui/model/json/JSONModel';
-import { TObject } from 'zsapbtpdecp/types/types';
+import { TSceneObject } from 'zsapbtpdecp/types/types';
 import Button from 'sap/m/Button';
 import ThreeJSRootController from './ThreeJSRoot.controller';
 import BindingMode from 'sap/ui/model/BindingMode';
@@ -25,15 +25,15 @@ export default class ThreeJS extends ThreeJSRootController {
 	/** JSONModel instance holding 3D object data. */
 	private _3JSModel!: JSONModel;
 	/** Array of objects representing 3D elements. */
-	private _3JSData!: TObject[];
+	private _3JSData!: TSceneObject[];
 
 	/**
 	 * - global model for toggle controller
 	 * - Map of object IDs to their corresponding Three.js objects.
 	 */
-	private _modelMaps: Map<string, THREE.Object3D | THREE.Mesh> = new Map();
-	/** Array of all Three.js objects in the scene. */
-	private _objects: THREE.Object3D[] = [];
+	private _objectsMap: Map<string, THREE.Object3D | THREE.Mesh> = new Map();
+	/** Array of all Three.js mesh objects (Cube) in the scene. */
+	private _meshs: THREE.Object3D[] = [];
 
 	/** Tracks whether the Shift key is pressed. */
 	private _isShiftDown: boolean = false;
@@ -59,6 +59,7 @@ export default class ThreeJS extends ThreeJSRootController {
 	}
 
 	public onAfterRendering(): void | undefined {
+		// Run ThreeJS after everything from UI5 have loaded to make sure the canvas is ready
 		this._initThreeJS();
 	}
 
@@ -101,7 +102,7 @@ export default class ThreeJS extends ThreeJSRootController {
 		const modelKey = checkbox.getCustomData()[0].getValue();
 		const visible = checkbox.getSelected();
 
-		const model = this._modelMaps.get(modelKey);
+		const model = this._objectsMap.get(modelKey);
 		if (model) model.visible = visible;
 	}
 
@@ -122,17 +123,19 @@ export default class ThreeJS extends ThreeJSRootController {
 
 		// Make object glow
 		if (object3D.type === 'cube') {
-			const model = this._modelMaps.get(modelKey);
+			const model = this._objectsMap.get(modelKey);
 			if (model && model instanceof THREE.Mesh)
 				this._setMeshFlash(model, 0xff0000, 1000);
 		}
 
+		// Camera position from object
+		const cameraDistance = 200;
 		// Move camera or controls to focus on the object
 		this.controls.target.copy(object3D.position);
 		this.camera.position.set(
-			object3D.position.x + 200,
-			object3D.position.y + 200,
-			object3D.position.z + 200
+			object3D.position.x + cameraDistance,
+			object3D.position.y + cameraDistance,
+			object3D.position.z + cameraDistance
 		);
 		this.controls.update();
 	}
@@ -212,7 +215,7 @@ export default class ThreeJS extends ThreeJSRootController {
 		scene.add(this._plane);
 
 		//
-		this._objects.push(this._plane);
+		this._meshs.push(this._plane);
 
 		// Handle key press event
 		document.addEventListener('pointermove', (e) =>
@@ -251,7 +254,7 @@ export default class ThreeJS extends ThreeJSRootController {
 
 		// Set raycaster from camera and pointer
 		this.raycaster.setFromCamera(this.pointer, camera);
-		const intersects = this.raycaster.intersectObjects(this._objects, false);
+		const intersects = this.raycaster.intersectObjects(this._meshs, false);
 		if (intersects.length > 0) {
 			const intersect = intersects[0];
 			this._rollOverMesh.position
@@ -290,14 +293,14 @@ export default class ThreeJS extends ThreeJSRootController {
 
 		// Set raycaster from camera and pointer
 		this.raycaster.setFromCamera(this.pointer, camera);
-		const intersects = this.raycaster.intersectObjects(this._objects, false);
+		const intersects = this.raycaster.intersectObjects(this._meshs, false);
 		if (intersects.length > 0) {
 			const intersect = intersects[0];
 			if (this._isShiftDown) {
 				// Remove the intersected voxel from the scene
 				if (intersect.object !== this._plane) {
 					scene.remove(intersect.object);
-					this._objects.splice(this._objects.indexOf(intersect.object), 1);
+					this._meshs.splice(this._meshs.indexOf(intersect.object), 1);
 
 					// Remove object from global model for toggle controller
 					const removedId =
@@ -316,7 +319,7 @@ export default class ThreeJS extends ThreeJSRootController {
 				scene.add(voxel);
 
 				//
-				this._objects.push(voxel);
+				this._meshs.push(voxel);
 
 				// Add object to global model for toggle controller
 				this._addObjectToModel(voxel);
@@ -348,14 +351,14 @@ export default class ThreeJS extends ThreeJSRootController {
 		this._3JSModel.refresh(true);
 
 		// Add the voxel to the global models map
-		this._modelMaps.set(voxel.uuid, voxel);
+		this._objectsMap.set(voxel.uuid, voxel);
 	}
 
 	/**
 	 * Remove object from Global model by ID
 	 * @param id
 	 */
-	private _removeObjectFromModel(id: TObject['id']): void {
+	private _removeObjectFromModel(id: TSceneObject['id']): void {
 		this._3JSData = this._3JSData.filter((obj) => obj.id !== id);
 		this._3JSModel.setProperty(ThreeJS.MODEL_PROP, this._3JSData);
 		this._3JSModel.refresh(true);
@@ -398,7 +401,7 @@ export default class ThreeJS extends ThreeJSRootController {
 		});
 
 		// Mesh Data to convert to 3JSMs.json
-		console.log('mesh data: ', this._objects);
+		console.log('mesh data: ', this._meshs);
 	}
 
 	/**
@@ -406,7 +409,7 @@ export default class ThreeJS extends ThreeJSRootController {
 	 * @param object
 	 * @param scene
 	 */
-	private _loadObjectCUBE(object: TObject, scene: THREE.Scene): void {
+	private _loadObjectCUBE(object: TSceneObject, scene: THREE.Scene): void {
 		const pos = new THREE.Vector3(
 			object.position.x,
 			object.position.y,
@@ -420,10 +423,10 @@ export default class ThreeJS extends ThreeJSRootController {
 		scene.add(voxel);
 
 		//
-		this._objects.push(voxel);
+		this._meshs.push(voxel);
 
 		// add model to global model for toggle controller
-		this._modelMaps.set(object.id, voxel);
+		this._objectsMap.set(object.id, voxel);
 	}
 
 	/**
@@ -431,7 +434,7 @@ export default class ThreeJS extends ThreeJSRootController {
 	 * @param object
 	 * @param scene
 	 */
-	private _loadObjectGLTF(object: TObject, scene: THREE.Scene): void {
+	private _loadObjectGLTF(object: TSceneObject, scene: THREE.Scene): void {
 		const loader = new GLTFLoader();
 		loader.load(
 			object.path,
@@ -463,7 +466,7 @@ export default class ThreeJS extends ThreeJSRootController {
 				scene.add(model);
 
 				// add model to global model for toggle controller
-				this._modelMaps.set(object.id, model);
+				this._objectsMap.set(object.id, model);
 			},
 			undefined,
 			(error) => {
