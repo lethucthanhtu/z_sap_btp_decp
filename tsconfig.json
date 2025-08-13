@@ -22,7 +22,8 @@
 			]
 		},
 		"typeRoots": [
-			"./node_modules/@types"
+			"./node_modules/@types",
+			"./node_modudes/@sapui5/types"
 		],
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,

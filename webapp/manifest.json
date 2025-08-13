@@ -20,6 +20,18 @@
       "id": "@sap/generator-fiori:basic",
       "version": "1.18.3",
       "toolsId": "14435492-3ac1-4524-b04e-f9ef4d3489f3"
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "intent1": {
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          },
+          "semanticObject": "Dynamic",
+          "action": "display"
+        }
+      }
     }
   },
   "sap.ui": {
@@ -120,5 +132,9 @@
       "id": "App",
       "async": true
     }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "zsapbtpdecp"
   }
 }

@@ -13,7 +13,14 @@ builder:
         transformModulesToUI5:
           overridesToOverride: true
     - name: ui5-tooling-modules-task
-      afterTask: replaceVersion
+      afterTask: ui5-tooling-transpile-task
+      configuration:
+        framework: SAPUI5
+        version: 1.138.0
+        addModules:
+          - three
+        prependPathMappings: true
+        debug: true
     - name: ui5-task-zipper
       afterTask: generateCachebusterInfo
       configuration:

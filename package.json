@@ -9,6 +9,7 @@
   ],
   "main": "webapp/index.html",
   "dependencies": {
+    "@sap/approuter": "^20.7.0",
     "three": "^0.178.0"
   },
   "devDependencies": {
@@ -24,12 +25,12 @@
     "@ui5/cli": "^4.0.16",
     "eslint": "8.57.0",
     "eslint-plugin-fiori-custom": "2.6.7",
-    "typescript": "^5.1.6",
-    "ui5-tooling-modules": "^3.29.0",
-    "ui5-tooling-transpile": "^3.3.7",
-    "ui5-task-zipper": "^3.4.x",
+    "mbt": "^1.2.29",
     "rimraf": "^5.0.5",
-    "mbt": "^1.2.29"
+    "typescript": "^5.1.6",
+    "ui5-task-zipper": "^3.4.x",
+    "ui5-tooling-modules": "^3.29.0",
+    "ui5-tooling-transpile": "^3.3.7"
   },
   "ui5": {
     "dependencies": [

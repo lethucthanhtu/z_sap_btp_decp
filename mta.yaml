@@ -10,6 +10,8 @@ modules:
   - name: zsapbtpdecp-repo-host
     parameters:
       content-target: true
+  - name: zsapbtpdecp-html5-runtime
+  - name: zsapbtpdecp-xsuaa
   build-parameters:
     build-result: resources
     requires:
@@ -27,6 +29,36 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: zsapbtpdecp-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: zsapbtpdecp-destination-service
+    parameters:
+      content-target: true
+  - name: zsapbtpdecp-repo-host
+    parameters:
+      service-key:
+        name: zsapbtpdecp-repo-host-key
+  - name: zsapbtpdecp-xsuaa
+    parameters:
+      service-key:
+        name: zsapbtpdecp-xsuaa-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: z3d_zsapbtpdecp_repo_host
+          ServiceInstanceName: zsapbtpdecp-html5-service
+          ServiceKeyName: zsapbtpdecp-repo-host-key
+          sap.cloud.service: z3d
+        - Authentication: OAuth2UserTokenExchange
+          Name: z3d_zsapbtpdecp_xsuaa
+          ServiceInstanceName: zsapbtpdecp-xsuaa
+          ServiceKeyName: zsapbtpdecp-xsuaa-key
+          sap.cloud.service: z3d
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
 resources:
 - name: zsapbtpdecp-repo-host
   type: org.cloudfoundry.managed-service
@@ -34,20 +66,22 @@ resources:
     service: html5-apps-repo
     service-name: zsapbtpdecp-html5-service
     service-plan: app-host
+- name: zsapbtpdecp-html5-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+- name: zsapbtpdecp-xsuaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: xs-security.json
+    service: xsuaa
+    service-plan: application
 - name: zsapbtpdecp-destination-service
   type: org.cloudfoundry.managed-service
   parameters:
     config:
-      HTML5Runtime_enabled: false
-      init_data:
-        instance:
-          destinations:
-          - Authentication: NoAuthentication
-            Name: ui5
-            ProxyType: Internet
-            Type: HTTP
-            URL: https://ui5.sap.com
-          existing_destinations_policy: update
+      HTML5Runtime_enabled: true
       version: 1.0.0
     service: destination
     service-name: zsapbtpdecp-destination-service
